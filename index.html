@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Irvington in Minecraft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#05070d;
+    --bg-alt:#090d18;
+    --panel:#0b0f1c;
+    --blue:#3b6bff;
+    --blue-bright:#7fa0ff;
+    --blue-dim:#16204a;
+    --line:#1c2757;
+    --line-soft:#131b3a;
+    --white:#eef1fb;
+    --muted:#7c88ae;
+    --mono:'JetBrains Mono', monospace;
+    --head:'Space Grotesk', sans-serif;
+    --body:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--white);
+    font-family:var(--body);
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1240px; margin:0 auto; padding:0 32px;}
+  section{position:relative;}
+
+  /* subtle background grid used behind several sections */
+  .grid-bg{
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(var(--line-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+            mask-image:linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+    opacity:.5;
+    pointer-events:none;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(5,7,13,.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .header-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 32px;
+    max-width:1240px; margin:0 auto;
+  }
+  .brand{display:flex; align-items:center; gap:12px;}
+  .brand-mark{
+    width:34px; height:34px;
+    border:1.5px solid var(--blue);
+    display:grid; place-items:center;
+    position:relative;
+    transform:rotate(45deg);
+  }
+  .brand-mark span{
+    display:block; width:10px; height:10px;
+    background:var(--blue);
+    transform:rotate(-45deg);
+    box-shadow:0 0 12px var(--blue);
+  }
+  .brand-name{
+    font-family:var(--head);
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:.02em;
+  }
+  .brand-name .light{color:var(--muted); font-weight:500;}
+  nav{display:flex; gap:36px; font-size:14px; color:var(--muted);}
+  nav a{transition:color .2s;}
+  nav a:hover{color:var(--white);}
+  .header-tag{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--blue-bright);
+  }
+  .nav-toggle{display:none;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:92vh;
+    display:flex; align-items:center;
+    padding:80px 0 60px;
+    overflow:hidden;
+  }
+  .hero-inner{
+    max-width:1240px; margin:0 auto; padding:0 32px;
+    display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;
+    width:100%;
+  }
+  .hero-eyebrow{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--blue-bright);
+    margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .hero-eyebrow::before{
+    content:''; width:22px; height:1px; background:var(--blue-bright);
+  }
+  .hero h1{
+    font-family:var(--head);
+    font-weight:700;
+    font-size:clamp(42px, 5.4vw, 76px);
+    line-height:1.02;
+    letter-spacing:-.01em;
+    color:var(--white);
+  }
+  .hero p.lede{
+    margin-top:24px;
+    max-width:440px;
+    color:var(--muted);
+    font-size:16.5px;
+    line-height:1.7;
+  }
+  .hero-actions{
+    margin-top:38px;
+    display:flex; gap:16px; align-items:center; flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:var(--body);
+    font-weight:600;
+    font-size:14.5px;
+    padding:14px 26px;
+    border:1.5px solid var(--blue);
+    color:var(--blue-bright);
+    background:transparent;
+    cursor:pointer;
+    transition:background .2s, color .2s, box-shadow .2s;
+  }
+  .btn:hover{
+    background:var(--blue);
+    color:#05070d;
+    box-shadow:0 0 28px rgba(59,107,255,.45);
+  }
+  .btn-ghost{
+    border-color:var(--line);
+    color:var(--muted);
+  }
+  .btn-ghost:hover{
+    background:transparent;
+    color:var(--white);
+    border-color:var(--muted);
+    box-shadow:none;
+  }
+  .hero-visual{
+    position:relative;
+    aspect-ratio:1/1;
+  }
+  .hero-visual svg{width:100%; height:100%;}
+
+  /* ---------- SECTION HEADS ---------- */
+  .section-pad{padding:120px 0;}
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    gap:24px; margin-bottom:56px; flex-wrap:wrap;
+  }
+  .section-index{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--blue-bright);
+    margin-bottom:14px;
+    display:block;
+  }
+  .section-head h2{
+    font-family:var(--head);
+    font-weight:600;
+    font-size:clamp(28px, 3.2vw, 40px);
+    max-width:560px;
+    letter-spacing:-.01em;
+  }
+  .section-head .section-note{
+    max-width:320px;
+    color:var(--muted);
+    font-size:15px;
+    line-height:1.65;
+  }
+
+  /* ---------- SCREENSHOTS CAROUSEL ---------- */
+  .carousel{
+    position:relative;
+  }
+  .carousel-frame{
+    position:relative;
+    aspect-ratio:16/8.2;
+    border:1px solid var(--line);
+    overflow:hidden;
+    background:var(--panel);
+  }
+  .slide{
+    position:absolute; inset:0;
+    display:flex; align-items:flex-end;
+    opacity:0; transition:opacity .7s ease;
+    background-size:cover; background-position:center;
+  }
+  .slide.active{opacity:1;}
+  .slide-scene{
+    position:absolute; inset:0;
+    background-image:
+      radial-gradient(circle at 30% 30%, rgba(59,107,255,.18), transparent 55%),
+      linear-gradient(var(--line-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+    background-size:auto, 40px 40px, 40px 40px;
+  }
+  .slide-caption{
+    position:relative; z-index:2;
+    width:100%;
+    display:flex; justify-content:space-between; align-items:flex-end;
+    padding:22px 26px;
+    background:linear-gradient(to top, rgba(5,7,13,.9), transparent);
+  }
+  .slide-caption .loc-index{font-family:var(--mono); color:var(--blue-bright); font-size:12px;}
+  .slide-caption h3{font-family:var(--head); font-weight:600; font-size:22px; margin-top:6px;}
+  .slide-caption p{color:var(--muted); font-size:13.5px; margin-top:4px;}
+  .carousel-controls{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top:22px;
+  }
+  .carousel-dots{display:flex; gap:10px;}
+  .dot{
+    width:8px; height:8px; border:1px solid var(--blue);
+    background:transparent; cursor:pointer; transition:.2s;
+    padding:0;
+  }
+  .dot.active{background:var(--blue); box-shadow:0 0 10px var(--blue);}
+  .carousel-arrows{display:flex; gap:10px;}
+  .arrow-btn{
+    width:38px; height:38px;
+    border:1px solid var(--line);
+    background:transparent; color:var(--muted);
+    display:grid; place-items:center; cursor:pointer;
+    transition:.2s;
+  }
+  .arrow-btn:hover{border-color:var(--blue); color:var(--blue-bright);}
+
+  /* ---------- METHODOLOGY ---------- */
+  .steps{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .step{
+    background:var(--bg);
+    padding:40px 34px 44px;
+  }
+  .step-num{
+    font-family:var(--mono); font-size:13px; color:var(--blue-bright);
+  }
+  .step-icon{
+    width:44px; height:44px; margin:26px 0 22px;
+  }
+  .step h3{
+    font-family:var(--head); font-weight:600; font-size:21px; margin-bottom:12px;
+  }
+  .step p{color:var(--muted); font-size:14.5px; line-height:1.7;}
+
+  .tools{
+    margin-top:1px;
+    display:grid; grid-template-columns:repeat(4, 1fr);
+    border:1px solid var(--line); border-top:none;
+  }
+  .tool-link{
+    display:flex; flex-direction:column; gap:10px;
+    padding:26px 22px;
+    border-left:1px solid var(--line);
+    transition:background .2s;
+  }
+  .tool-link:first-child{border-left:none;}
+  .tool-link:hover{background:var(--panel);}
+  .tool-badge{
+    width:36px; height:36px;
+    border:1px solid var(--blue-dim);
+    display:grid; place-items:center;
+    font-family:var(--mono); font-size:12px; color:var(--blue-bright);
+  }
+  .tool-link .tool-name{font-weight:600; font-size:14.5px; color:var(--white);}
+  .tool-link .tool-desc{font-size:12.5px; color:var(--muted); line-height:1.5;}
+
+  /* ---------- CREDITS ---------- */
+  .credits-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:64px;
+  }
+  .credit-col h3{
+    font-family:var(--head); font-weight:600; font-size:18px;
+    margin-bottom:22px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .credit-col h3::after{content:''; flex:1; height:1px; background:var(--line);}
+  .credit-list{list-style:none;}
+  .credit-list li{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:14px 0; border-bottom:1px solid var(--line-soft);
+    font-size:15px;
+  }
+  .credit-list li .role{
+    font-family:var(--mono); font-size:12px; color:var(--muted);
+  }
+
+  /* ---------- DOWNLOAD ---------- */
+  .download-section{
+    border-top:1px solid var(--line-soft);
+    border-bottom:1px solid var(--line-soft);
+    background:var(--bg-alt);
+  }
+  .download-inner{
+    display:flex; justify-content:space-between; align-items:center;
+    gap:40px; flex-wrap:wrap;
+    padding:90px 0;
+  }
+  .download-inner h2{
+    font-family:var(--head); font-weight:600;
+    font-size:clamp(30px,3.6vw,44px);
+    max-width:460px;
+    letter-spacing:-.01em;
+  }
+  .download-meta{
+    display:flex; gap:36px; margin-top:26px; flex-wrap:wrap;
+  }
+  .download-meta div{font-family:var(--mono); font-size:12.5px; color:var(--muted);}
+  .download-meta strong{display:block; color:var(--white); font-family:var(--body); font-size:16px; margin-top:4px;}
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:64px 0 40px;}
+  .footer-top{
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:40px;
+    padding-bottom:40px; border-bottom:1px solid var(--line-soft);
+  }
+  .footer-brand .brand{margin-bottom:14px;}
+  .footer-brand p{color:var(--muted); font-size:14px; max-width:280px;}
+  .footer-contact h4, .footer-links h4{
+    font-family:var(--mono); font-size:12px; color:var(--blue-bright);
+    margin-bottom:16px;
+  }
+  .footer-contact p, .footer-links a{
+    display:block; color:var(--muted); font-size:14.5px; margin-bottom:10px;
+  }
+  .footer-links a:hover{color:var(--white);}
+  .footer-bottom{
+    display:flex; justify-content:space-between; align-items:center;
+    padding-top:28px; flex-wrap:wrap; gap:12px;
+    font-size:13px; color:var(--muted);
+  }
+  .footer-bottom span{font-family:var(--mono);}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:860px){
+    nav{display:none;}
+    .hero-inner{grid-template-columns:1fr;}
+    .hero-visual{order:-1; max-width:340px; margin:0 auto;}
+    .steps{grid-template-columns:1fr;}
+    .tools{grid-template-columns:repeat(2,1fr);}
+    .tool-link:nth-child(3){border-left:none;}
+    .credits-grid{grid-template-columns:1fr; gap:40px;}
+    .download-inner{padding:64px 0;}
+    .footer-top{flex-direction:column;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .slide{transition:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark"><span></span></div>
+      <div class="brand-name">IRVINGTON <span class="light">IN MINECRAFT</span></div>
+    </div>
+    <nav>
+      <a href="#screenshots">Screenshots</a>
+      <a href="#methodology">Methodology</a>
+      <a href="#credits">Credits</a>
+      <a href="#download">Download</a>
+    </nav>
+    <div class="header-tag">100% vanilla survival</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">2025 / 2026 SCHOOL YEAR</div>
+        <h1>Irvington,<br>rebuilt in blocks.</h1>
+        <p class="lede">A full-scale recreation of Irvington High School, measured to the meter and rebuilt one block at a time — every hallway, classroom and courtyard, on a fully vanilla server.</p>
+        <div class="hero-actions">
+          <a href="#download" class="btn">Download the world</a>
+          <a href="#screenshots" class="btn btn-ghost">See screenshots</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <svg viewBox="0 0 500 500" fill="none">
+          <defs>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3.2" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <g stroke="#3b6bff" stroke-width="1" opacity="0.9" filter="url(#glow)">
+            <!-- isometric footprint blocks -->
+            <path d="M250 60 L420 155 L420 260 L250 355 L80 260 L80 155 Z" opacity="0.55"/>
+            <path d="M250 60 L250 355" opacity="0.25"/>
+            <path d="M80 155 L420 155" opacity="0.25"/>
+            <path d="M80 260 L420 260" opacity="0.25"/>
+            <path d="M250 60 L80 155" opacity="0.4"/>
+            <path d="M250 60 L420 155" opacity="0.4"/>
+            <path d="M80 260 L250 355" opacity="0.4"/>
+            <path d="M420 260 L250 355" opacity="0.4"/>
+
+            <path d="M140 195 L360 195" opacity="0.5"/>
+            <path d="M140 195 L140 320 L250 380" opacity="0.35"/>
+            <path d="M360 195 L360 320 L250 380" opacity="0.35"/>
+
+            <rect x="165" y="150" width="40" height="26" opacity="0.5"/>
+            <rect x="220" y="150" width="40" height="26" opacity="0.5"/>
+            <rect x="275" y="150" width="40" height="26" opacity="0.5"/>
+            <rect x="195" y="220" width="30" height="30" opacity="0.5"/>
+            <rect x="245" y="220" width="30" height="30" opacity="0.5"/>
+            <rect x="295" y="220" width="30" height="30" opacity="0.5"/>
+
+            <circle cx="250" cy="60" r="3" fill="#3b6bff"/>
+            <circle cx="420" cy="155" r="3" fill="#3b6bff"/>
+            <circle cx="420" cy="260" r="3" fill="#3b6bff"/>
+            <circle cx="250" cy="355" r="3" fill="#3b6bff"/>
+            <circle cx="80" cy="260" r="3" fill="#3b6bff"/>
+            <circle cx="80" cy="155" r="3" fill="#3b6bff"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREENSHOTS -->
+  <section id="screenshots" class="section-pad">
+    <div class="grid-bg"></div>
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="section-index">SCREENSHOTS</span>
+          <h2>A walk through the build.</h2>
+        </div>
+        <p class="section-note">Renders from the finished world — from the front facade down to the smallest classroom details.</p>
+      </div>
+
+      <div class="carousel">
+        <div class="carousel-frame" id="carouselFrame">
+          <!-- slides injected by JS -->
+        </div>
+        <div class="carousel-controls">
+          <div class="carousel-dots" id="carouselDots"></div>
+          <div class="carousel-arrows">
+            <button class="arrow-btn" id="prevBtn" aria-label="Previous screenshot">&#8592;</button>
+            <button class="arrow-btn" id="nextBtn" aria-label="Next screenshot">&#8594;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METHODOLOGY -->
+  <section id="methodology" class="section-pad">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="section-index">METHODOLOGY</span>
+          <h2>How we built it.</h2>
+        </div>
+        <p class="section-note">Three passes — from raw measurements to finished interiors — got the campus from Google Earth into the game.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">01</span>
+          <svg class="step-icon" viewBox="0 0 44 44" fill="none" stroke="#3b6bff" stroke-width="1.4">
+            <circle cx="22" cy="22" r="15"/>
+            <path d="M22 7 L22 12 M22 32 L22 37 M7 22 L12 22 M32 22 L37 22"/>
+            <circle cx="22" cy="22" r="3" fill="#3b6bff" stroke="none"/>
+          </svg>
+          <h3>Measurements</h3>
+          <p>We used Google Earth to measure distances and altitudes in meters, then translated every reading into blocks at a 1:1 scale.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">02</span>
+          <svg class="step-icon" viewBox="0 0 44 44" fill="none" stroke="#3b6bff" stroke-width="1.4">
+            <rect x="6" y="12" width="32" height="22" rx="1"/>
+            <circle cx="22" cy="23" r="7"/>
+            <path d="M16 12 L19 8 H25 L28 12"/>
+          </svg>
+          <h3>Visual data</h3>
+          <p>We worked with Irvington students and staff to photograph and film rooms across campus, so every interior matches the real thing.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">03</span>
+          <svg class="step-icon" viewBox="0 0 44 44" fill="none" stroke="#3b6bff" stroke-width="1.4">
+            <path d="M8 30 L18 30 L18 20 L28 20 L28 12 L36 12"/>
+            <rect x="6" y="30" width="6" height="6"/>
+            <rect x="24" y="20" width="6" height="6"/>
+            <rect x="34" y="10" width="6" height="6"/>
+          </svg>
+          <h3>Construction</h3>
+          <p>We used WorldEdit and CurveBuilding to construct the campus, then Litematica and MapArtCraft to place accurate map art throughout.</p>
+        </div>
+      </div>
+
+      <div class="tools">
+        <a class="tool-link" href="https://enginehub.org/worldedit" target="_blank" rel="noopener">
+          <div class="tool-badge">WE</div>
+          <span class="tool-name">WorldEdit</span>
+          <span class="tool-desc">In-game map editor for fast block placement and large structures.</span>
+        </a>
+        <a class="tool-link" href="https://www.spigotmc.org/resources/curvebuilding.108588/" target="_blank" rel="noopener">
+          <div class="tool-badge">CB</div>
+          <span class="tool-name">CurveBuilding</span>
+          <span class="tool-desc">WorldEdit add-on for laying structures along smooth Bézier curves.</span>
+        </a>
+        <a class="tool-link" href="https://modrinth.com/mod/litematica" target="_blank" rel="noopener">
+          <div class="tool-badge">LM</div>
+          <span class="tool-name">Litematica</span>
+          <span class="tool-desc">Schematic tool for planning, previewing and placing builds precisely.</span>
+        </a>
+        <a class="tool-link" href="https://www.mapartcraft.rebane2001.com/" target="_blank" rel="noopener">
+          <div class="tool-badge">MC</div>
+          <span class="tool-name">MapArtCraft</span>
+          <span class="tool-desc">Converts images into block layouts for in-game map art.</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREDITS -->
+  <section id="credits" class="section-pad">
+    <div class="grid-bg"></div>
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="section-index">CREDITS</span>
+          <h2>Who built it.</h2>
+        </div>
+        <p class="section-note">A student-run project, built over the school year by a small building team with help from across campus.</p>
+      </div>
+
+      <div class="credits-grid">
+        <div class="credit-col">
+          <h3>Main builders</h3>
+          <ul class="credit-list">
+            <li>Alex Chen <span class="role">Lead builder</span></li>
+            <li>Priya Nair <span class="role">Terrain & landscaping</span></li>
+            <li>Marcus Webb <span class="role">Interiors</span></li>
+            <li>Sofia Ramirez <span class="role">Map art</span></li>
+          </ul>
+        </div>
+        <div class="credit-col">
+          <h3>Other contributors</h3>
+          <ul class="credit-list">
+            <li>Devon Park <span class="role">Photography</span></li>
+            <li>Lily Zhao <span class="role">Reference footage</span></li>
+            <li>Irvington Staff <span class="role">Room access</span></li>
+            <li>Jordan Blake <span class="role">Testing</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD -->
+  <section id="download" class="download-section">
+    <div class="wrap">
+      <div class="download-inner">
+        <div>
+          <span class="section-index">WORLD DOWNLOAD</span>
+          <h2>Take the whole campus home.</h2>
+          <div class="download-meta">
+            <div>FORMAT<strong>.zip world save</strong></div>
+            <div>SIZE<strong>~1.4 GB</strong></div>
+            <div>VERSION<strong>Java 1.21</strong></div>
+          </div>
+        </div>
+        <a class="btn" href="files/irvington-in-minecraft-2026.zip" download>Download the world</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="brand">
+          <div class="brand-mark"><span></span></div>
+          <div class="brand-name">IRVINGTON <span class="light">IN MINECRAFT</span></div>
+        </div>
+        <p>A student project recreating Irvington High School block by block, fully vanilla.</p>
+      </div>
+      <div class="footer-contact">
+        <h4>CONTACT</h4>
+        <p>irvingtoninminecraft@gmail.com</p>
+        <p>@irvingtoninmc</p>
+      </div>
+      <div class="footer-links">
+        <h4>SITE</h4>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#methodology">Methodology</a>
+        <a href="#credits">Credits</a>
+        <a href="#download">Download</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Irvington in Minecraft. Not affiliated with Mojang or Microsoft.</span>
+      <span>Built for the 2025/2026 school year</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const slidesData = [
+    { loc:"01 / Front facade", title:"Main entrance", desc:"The front steps and crest, rebuilt to scale." },
+    { loc:"02 / Library", title:"Media center", desc:"Shelving, reading nooks and the circulation desk." },
+    { loc:"03 / Gymnasium", title:"Main gym", desc:"Bleachers, scoreboard and the hardwood floor." },
+    { loc:"04 / Courtyard", title:"Central courtyard", desc:"Benches, trees and the walkways between wings." },
+    { loc:"05 / Science wing", title:"Science labs", desc:"Lab benches, fume hoods and storage rooms." },
+    { loc:"06 / Cafeteria", title:"Cafeteria", desc:"Serving line, tables and the stage at the far end." }
+  ];
+
+  const frame = document.getElementById('carouselFrame');
+  const dotsWrap = document.getElementById('carouselDots');
+  let current = 0;
+  let timer;
+
+  slidesData.forEach((s, i) => {
+    const slide = document.createElement('div');
+    slide.className = 'slide' + (i === 0 ? ' active' : '');
+    slide.innerHTML = `
+      <div class="slide-scene"></div>
+      <div class="slide-caption">
+        <div>
+          <div class="loc-index">${s.loc}</div>
+          <h3>${s.title}</h3>
+          <p>${s.desc}</p>
+        </div>
+      </div>`;
+    frame.appendChild(slide);
+
+    const dot = document.createElement('button');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    dot.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(dot);
+  });
+
+  const slideEls = document.querySelectorAll('.slide');
+  const dotEls = document.querySelectorAll('.dot');
+
+  function goTo(i){
+    slideEls[current].classList.remove('active');
+    dotEls[current].classList.remove('active');
+    current = (i + slideEls.length) % slideEls.length;
+    slideEls[current].classList.add('active');
+    dotEls[current].classList.add('active');
+    resetTimer();
+  }
+
+  function resetTimer(){
+    clearInterval(timer);
+    timer = setInterval(() => goTo(current + 1), 5000);
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
+  document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
+
+  resetTimer();
+</script>
+
+</body>
+</html>
