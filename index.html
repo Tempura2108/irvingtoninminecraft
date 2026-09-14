@@ -114,13 +114,18 @@
   /* ---------- HERO ---------- */
   .hero{
     min-height:92vh;
-    display:flex; align-items:center;
+    display:flex; 
+    align-items:center;
     padding:80px 0 60px;
     overflow:hidden;
   }
   .hero-inner{
-    max-width:12000px; margin:0 auto; padding:0 32px;
-    display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;
+    max-width:12000px; 
+    margin:0 auto;
+    padding:0 32px;
+    display:grid; 
+    grid-template-columns:minmax(320px, 560px) 1fr;; 
+    align-items:center;
     width:100%;
   }
   .hero-eyebrow{
@@ -131,7 +136,10 @@
     display:flex; align-items:center; gap:10px;
   }
   .hero-eyebrow::before{
-    content:''; width:22px; height:1px; background:var(--blue-bright);
+    content:''; 
+    width:22px; 
+    height:1px; 
+    background:var(--blue-bright);
   }
   .hero h1{
     font-family:var(--head);
@@ -150,10 +158,14 @@
   }
   .hero-actions{
     margin-top:38px;
-    display:flex; gap:16px; align-items:center; flex-wrap:wrap;
+    display:flex; gap:16px; 
+    align-items:center; 
+    flex-wrap:wrap;
   }
   .btn{
-    display:inline-flex; align-items:center; gap:10px;
+    display:inline-flex; 
+    align-items:center; 
+    gap:10px;
     font-family:var(--body);
     font-weight:600;
     font-size:14.5px;
