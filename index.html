@@ -182,6 +182,8 @@
   .hero-visual{
     position:relative;
     aspect-ratio:1/1;
+    max-width:clamp(280px, 32vw, 460px);
+    margin-left:auto;
   }
   .hero-visual svg{width:100%; height:100%;}
 
@@ -457,46 +459,7 @@
             1. Delete the <svg>...</svg> block below.
             2. Add: <img src="images/hero-wireframe.png" alt="Wireframe render of Irvington High School">
         -->
-        <svg viewBox="0 0 500 500" fill="none">
-          <defs>
-            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="3.2" result="blur"/>
-              <feMerge>
-                <feMergeNode in="blur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </defs>
-          <g stroke="#3b6bff" stroke-width="1" opacity="0.9" filter="url(#glow)">
-            <!-- isometric footprint blocks -->
-            <path d="M250 60 L420 155 L420 260 L250 355 L80 260 L80 155 Z" opacity="0.55"/>
-            <path d="M250 60 L250 355" opacity="0.25"/>
-            <path d="M80 155 L420 155" opacity="0.25"/>
-            <path d="M80 260 L420 260" opacity="0.25"/>
-            <path d="M250 60 L80 155" opacity="0.4"/>
-            <path d="M250 60 L420 155" opacity="0.4"/>
-            <path d="M80 260 L250 355" opacity="0.4"/>
-            <path d="M420 260 L250 355" opacity="0.4"/>
-
-            <path d="M140 195 L360 195" opacity="0.5"/>
-            <path d="M140 195 L140 320 L250 380" opacity="0.35"/>
-            <path d="M360 195 L360 320 L250 380" opacity="0.35"/>
-
-            <rect x="165" y="150" width="40" height="26" opacity="0.5"/>
-            <rect x="220" y="150" width="40" height="26" opacity="0.5"/>
-            <rect x="275" y="150" width="40" height="26" opacity="0.5"/>
-            <rect x="195" y="220" width="30" height="30" opacity="0.5"/>
-            <rect x="245" y="220" width="30" height="30" opacity="0.5"/>
-            <rect x="295" y="220" width="30" height="30" opacity="0.5"/>
-
-            <circle cx="250" cy="60" r="3" fill="#3b6bff"/>
-            <circle cx="420" cy="155" r="3" fill="#3b6bff"/>
-            <circle cx="420" cy="260" r="3" fill="#3b6bff"/>
-            <circle cx="250" cy="355" r="3" fill="#3b6bff"/>
-            <circle cx="80" cy="260" r="3" fill="#3b6bff"/>
-            <circle cx="80" cy="155" r="3" fill="#3b6bff"/>
-          </g>
-        </svg>
+       <img src="images/blue-dynmap.png" alt="Irvington High School on Dynmap">
       </div>
     </div>
   </section>
@@ -554,13 +517,8 @@
             Replace the placeholder <svg> with:
               <img src="images/step-1-measurements.jpg" alt="Google Earth measurements">
           -->
-          <img src="images/measurements.png" alt="Google Earth measurement overlay">
           <div class="step-media">
-            <svg viewBox="0 0 44 44" fill="none" stroke="#3b6bff" stroke-width="1.4">
-              <circle cx="22" cy="22" r="15"/>
-              <path d="M22 7 L22 12 M22 32 L22 37 M7 22 L12 22 M32 22 L37 22"/>
-              <circle cx="22" cy="22" r="3" fill="#3b6bff" stroke="none"/>
-            </svg>
+            <img src="images/measurements.png" alt="Google Earth measurements">
           </div>
           <div class="step-body">
             <span class="step-num">01</span>
@@ -574,13 +532,8 @@
             Replace the placeholder <svg> with:
               <img src="images/step-2-visual-data.jpg" alt="Photographing a classroom for reference">
           -->
-          <img src="images/visual-data.jpg" alt="Photographing the staff room">
           <div class="step-media">
-            <svg viewBox="0 0 44 44" fill="none" stroke="#3b6bff" stroke-width="1.4">
-              <rect x="6" y="12" width="32" height="22" rx="1"/>
-              <circle cx="22" cy="23" r="7"/>
-              <path d="M16 12 L19 8 H25 L28 12"/>
-            </svg>
+            <img src="images/visual-data.jpg" alt="Photographing the staff room">
           </div>
           <div class="step-body">
             <span class="step-num">02</span>
@@ -594,14 +547,8 @@
             Replace the placeholder <svg> with:
               <img src="images/step-3-construction.jpg" alt="Scaffolding during construction in-game">
           -->
-          <img src="images/construction.jpg" alt="Building the softball field">
           <div class="step-media">
-            <svg viewBox="0 0 44 44" fill="none" stroke="#3b6bff" stroke-width="1.4">
-              <path d="M8 30 L18 30 L18 20 L28 20 L28 12 L36 12"/>
-              <rect x="6" y="30" width="6" height="6"/>
-              <rect x="24" y="20" width="6" height="6"/>
-              <rect x="34" y="10" width="6" height="6"/>
-            </svg>
+            <img src="images/construction.jpg" alt="Building the softball field">
           </div>
           <div class="step-body">
             <span class="step-num">03</span>
