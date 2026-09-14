@@ -4,13 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Irvington in Minecraft</title>
+
+<!--
+  FAVICON
+  Below is a sample favicon built inline as an SVG data URI, so the tab icon
+  works immediately with no extra files — it reuses the rotated-square "brand
+  mark" from the header (blue outline diamond with a glowing dot).
+
+  To use a real favicon file instead:
+    1. Export a square icon (ideally 512x512 as your source, then generate
+       32x32 / 180x180 / etc. via a tool like realfavicongenerator.net).
+    2. Save the files (e.g. favicon.ico, favicon-32x32.png, apple-touch-icon.png)
+       next to this HTML file, or in an /images or /icons folder.
+    3. Replace the single <link rel="icon" ...> line below with something like:
+         <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+         <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+-->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='16' y='16' width='32' height='32' fill='none' stroke='%233b6bff' stroke-width='4' transform='rotate(45 32 32)'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%233b6bff'/%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="images/favicon-lime-shadow.png">
 <style>
   :root{
-    --bg:#05070d;
+    --bg:#000000;
     --bg-alt:#090d18;
     --panel:#0b0f1c;
     --blue:#3b6bff;
@@ -54,7 +71,7 @@
   /* ---------- HEADER ---------- */
   header{
     position:sticky; top:0; z-index:50;
-    background:rgba(5,7,13,.82);
+    background:rgba(0,0,0,.82);
     backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line-soft);
   }
@@ -149,7 +166,7 @@
   }
   .btn:hover{
     background:var(--blue);
-    color:#05070d;
+    color:#000000;
     box-shadow:0 0 28px rgba(59,107,255,.45);
   }
   .btn-ghost{
@@ -226,7 +243,7 @@
     width:100%;
     display:flex; justify-content:space-between; align-items:flex-end;
     padding:22px 26px;
-    background:linear-gradient(to top, rgba(5,7,13,.9), transparent);
+    background:linear-gradient(to top, rgba(0,0,0,.9), transparent);
   }
   .slide-caption .loc-index{font-family:var(--mono); color:var(--blue-bright); font-size:12px;}
   .slide-caption h3{font-family:var(--head); font-weight:600; font-size:22px; margin-top:6px;}
@@ -260,18 +277,39 @@
   }
   .step{
     background:var(--bg);
-    padding:40px 34px 44px;
+    display:flex;
+    flex-direction:column;
+  }
+  /* Media block sized to the methodology image ratio (1912 x 942 ≈ 2.03:1).
+     Drop an <img> in here (see IMAGE SLOT comments below) and it will fill
+     this box edge-to-edge via object-fit:cover. */
+  .step-media{
+    width:100%;
+    aspect-ratio:1912/942;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+    background:var(--panel);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .step-media img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .step-media svg{
+    /* placeholder icon sizing while no real photo is in place */
+    width:56px; height:56px;
+  }
+  .step-body{
+    padding:28px 34px 40px;
   }
   .step-num{
     font-family:var(--mono); font-size:13px; color:var(--blue-bright);
   }
-  .step-icon{
-    width:44px; height:44px; margin:26px 0 22px;
+  .step-body h3{
+    font-family:var(--head); font-weight:600; font-size:21px; margin:16px 0 12px;
   }
-  .step h3{
-    font-family:var(--head); font-weight:600; font-size:21px; margin-bottom:12px;
-  }
-  .step p{color:var(--muted); font-size:14.5px; line-height:1.7;}
+  .step-body p{color:var(--muted); font-size:14.5px; line-height:1.7;}
 
   .tools{
     margin-top:1px;
@@ -419,7 +457,46 @@
             1. Delete the <svg>...</svg> block below.
             2. Add: <img src="images/hero-wireframe.png" alt="Wireframe render of Irvington High School">
         -->
-        <img src="images/blue-dynmap.jpg" alt="Model of the school on Dynmap">
+        <svg viewBox="0 0 500 500" fill="none">
+          <defs>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3.2" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <g stroke="#3b6bff" stroke-width="1" opacity="0.9" filter="url(#glow)">
+            <!-- isometric footprint blocks -->
+            <path d="M250 60 L420 155 L420 260 L250 355 L80 260 L80 155 Z" opacity="0.55"/>
+            <path d="M250 60 L250 355" opacity="0.25"/>
+            <path d="M80 155 L420 155" opacity="0.25"/>
+            <path d="M80 260 L420 260" opacity="0.25"/>
+            <path d="M250 60 L80 155" opacity="0.4"/>
+            <path d="M250 60 L420 155" opacity="0.4"/>
+            <path d="M80 260 L250 355" opacity="0.4"/>
+            <path d="M420 260 L250 355" opacity="0.4"/>
+
+            <path d="M140 195 L360 195" opacity="0.5"/>
+            <path d="M140 195 L140 320 L250 380" opacity="0.35"/>
+            <path d="M360 195 L360 320 L250 380" opacity="0.35"/>
+
+            <rect x="165" y="150" width="40" height="26" opacity="0.5"/>
+            <rect x="220" y="150" width="40" height="26" opacity="0.5"/>
+            <rect x="275" y="150" width="40" height="26" opacity="0.5"/>
+            <rect x="195" y="220" width="30" height="30" opacity="0.5"/>
+            <rect x="245" y="220" width="30" height="30" opacity="0.5"/>
+            <rect x="295" y="220" width="30" height="30" opacity="0.5"/>
+
+            <circle cx="250" cy="60" r="3" fill="#3b6bff"/>
+            <circle cx="420" cy="155" r="3" fill="#3b6bff"/>
+            <circle cx="420" cy="260" r="3" fill="#3b6bff"/>
+            <circle cx="250" cy="355" r="3" fill="#3b6bff"/>
+            <circle cx="80" cy="260" r="3" fill="#3b6bff"/>
+            <circle cx="80" cy="155" r="3" fill="#3b6bff"/>
+          </g>
+        </svg>
       </div>
     </div>
   </section>
@@ -470,56 +547,64 @@
 
       <div class="steps">
         <div class="step">
-          <span class="step-num">01</span>
           <!--
-            IMAGE SLOT: Step 1 image (Measurements)
-            Replace this <svg> icon with a real photo, e.g. a Google Earth
-            screenshot showing measurement lines:
-              <img class="step-icon" src="images/step-1-measurements.jpg" alt="Google Earth measurement overlay">
-            Note: .step-icon is sized 44x44 for the icon version; a real photo
-            will likely need its own wider aspect ratio and CSS rule.
+            IMAGE SLOT: Step 1 image (Measurements) — target size 1912 x 942px
+            .step-media below is locked to that exact aspect ratio (1912/942 ≈ 2.03:1)
+            and will crop-to-fill (object-fit:cover) at any card width.
+            Replace the placeholder <svg> with:
+              <img src="images/step-1-measurements.jpg" alt="Google Earth measurement overlay">
           -->
-          <img class="step-icon" src="images/measurements.jpg" alt="Google Earth measurements">
-          <svg class="step-icon" viewBox="0 0 44 44" fill="none" stroke="#3b6bff" stroke-width="1.4">
-            <circle cx="22" cy="22" r="15"/>
-            <path d="M22 7 L22 12 M22 32 L22 37 M7 22 L12 22 M32 22 L37 22"/>
-            <circle cx="22" cy="22" r="3" fill="#3b6bff" stroke="none"/>
-          </svg>
-          <h3>Measurements</h3>
-          <p>We used Google Earth to measure distances and altitudes in meters, then translated every reading into blocks at a 1:1 scale.</p>
+          <div class="step-media">
+            <svg viewBox="0 0 44 44" fill="none" stroke="#3b6bff" stroke-width="1.4">
+              <circle cx="22" cy="22" r="15"/>
+              <path d="M22 7 L22 12 M22 32 L22 37 M7 22 L12 22 M32 22 L37 22"/>
+              <circle cx="22" cy="22" r="3" fill="#3b6bff" stroke="none"/>
+            </svg>
+          </div>
+          <div class="step-body">
+            <span class="step-num">01</span>
+            <h3>Measurements</h3>
+            <p>We used Google Earth to measure distances and altitudes in meters, then translated every reading into blocks at a 1:1 scale.</p>
+          </div>
         </div>
         <div class="step">
-          <span class="step-num">02</span>
           <!--
-            IMAGE SLOT: Step 2 image (Visual data)
-            Replace with a real photo of the reference-gathering process, e.g.:
-              <img class="step-icon" src="images/step-2-visual-data.jpg" alt="Photographing a classroom for reference">
+            IMAGE SLOT: Step 2 image (Visual data) — target size 1912 x 942px
+            Replace the placeholder <svg> with:
+              <img src="images/step-2-visual-data.jpg" alt="Photographing a classroom for reference">
           -->
-          <img class="step-icon" src="images/visual-data.jpg" alt="Photo of the Staff Room">
-          <svg class="step-icon" viewBox="0 0 44 44" fill="none" stroke="#3b6bff" stroke-width="1.4">
-            <rect x="6" y="12" width="32" height="22" rx="1"/>
-            <circle cx="22" cy="23" r="7"/>
-            <path d="M16 12 L19 8 H25 L28 12"/>
-          </svg>
-          <h3>Visual data</h3>
-          <p>We worked with Irvington students and staff to photograph and film rooms across campus, so every interior matches the real thing.</p>
+          <div class="step-media">
+            <svg viewBox="0 0 44 44" fill="none" stroke="#3b6bff" stroke-width="1.4">
+              <rect x="6" y="12" width="32" height="22" rx="1"/>
+              <circle cx="22" cy="23" r="7"/>
+              <path d="M16 12 L19 8 H25 L28 12"/>
+            </svg>
+          </div>
+          <div class="step-body">
+            <span class="step-num">02</span>
+            <h3>Visual data</h3>
+            <p>We worked with Irvington students and staff to photograph and film rooms across campus, so every interior matches the real thing.</p>
+          </div>
         </div>
         <div class="step">
-          <span class="step-num">03</span>
           <!--
-            IMAGE SLOT: Step 3 image (Construction)
-            Replace with a real in-game screenshot of the build in progress, e.g.:
-              <img class="step-icon" src="images/step-3-construction.jpg" alt="Scaffolding during construction in-game">
+            IMAGE SLOT: Step 3 image (Construction) — target size 1912 x 942px
+            Replace the placeholder <svg> with:
+              <img src="images/step-3-construction.jpg" alt="Scaffolding during construction in-game">
           -->
-          <img class="step-icon" src="images/construction.jpg" alt="Building the softball field">
-          <svg class="step-icon" viewBox="0 0 44 44" fill="none" stroke="#3b6bff" stroke-width="1.4">
-            <path d="M8 30 L18 30 L18 20 L28 20 L28 12 L36 12"/>
-            <rect x="6" y="30" width="6" height="6"/>
-            <rect x="24" y="20" width="6" height="6"/>
-            <rect x="34" y="10" width="6" height="6"/>
-          </svg>
-          <h3>Construction</h3>
-          <p>We used WorldEdit and CurveBuilding to construct the campus, then Litematica and MapArtCraft to place accurate map art throughout.</p>
+          <div class="step-media">
+            <svg viewBox="0 0 44 44" fill="none" stroke="#3b6bff" stroke-width="1.4">
+              <path d="M8 30 L18 30 L18 20 L28 20 L28 12 L36 12"/>
+              <rect x="6" y="30" width="6" height="6"/>
+              <rect x="24" y="20" width="6" height="6"/>
+              <rect x="34" y="10" width="6" height="6"/>
+            </svg>
+          </div>
+          <div class="step-body">
+            <span class="step-num">03</span>
+            <h3>Construction</h3>
+            <p>We used WorldEdit and CurveBuilding to construct the campus, then Litematica and MapArtCraft to place accurate map art throughout.</p>
+          </div>
         </div>
       </div>
 
