@@ -388,21 +388,29 @@
 
   /* ---------- DOWNLOAD ---------- */
   .download-section{
-    position:relative;
-    border-top:1px solid var(--line-soft);
-    border-bottom:1px solid var(--line-soft);
-    background-color:var(--bg-alt);
-    /*
-      IMAGE SLOT: World Download background
-      Placeholder path below — swap for a real screenshot/render of the
-      finished world. background-size:cover + center keeps it filling the
-      section and cropped sensibly at any width.
-    */
-    background-image:url('images/download-bg.jpg');
-    background-size:cover;
-    background-position:center;
-    overflow:hidden;
-  }
+  position:relative;
+  border-top:1px solid var(--line-soft);
+  border-bottom:1px solid var(--line-soft);
+  /*
+    IMAGE SLOT: World Download background
+    Placeholder path below — swap for a real screenshot/render of the
+    finished world. background-size:cover + center keeps it filling the
+    section and cropped sensibly at any width.
+
+    background-color + background-blend-mode:overlay run the image through
+    the "overlay" blend mode against that solid color, instead of just
+    dimming it with a translucent layer — this tints/colorizes the photo
+    to match the site's palette rather than just darkening it. Swap
+    background-color for any other var(--...) color, or change "overlay"
+    to "multiply", "screen", "darken", etc. for a different effect.
+  */
+  background-color:var(--bg-alt);
+  background-image:url('images/download-bg.jpg');
+  background-size:cover;
+  background-position:center;
+  background-blend-mode:overlay;
+  overflow:hidden;
+}
   /* Dark overlay so the text stays readable over the background image.
      Sits between the background image and the actual content (which has
      z-index:1 below), so it never blocks clicks on the download button. */
