@@ -285,24 +285,41 @@
   .arrow-btn:hover{border-color:var(--blue); color:var(--blue-bright);}
 
   /* ---------- METHODOLOGY ---------- */
-  .steps{
-    display:grid; grid-template-columns:repeat(3, 1fr); gap:1px;
-    background:var(--line);
-    border:1px solid var(--line);
+  /* Alternating text/image rows — each step is a full-width row with a
+     narrow text column and a large media column, flipping sides every
+     other row (row 2 is reversed via .method-row.reverse). */
+  .method-rows{
+    display:flex; flex-direction:column;
+    gap:110px;
+    margin-bottom:90px;
   }
-  .step{
-    background:var(--bg);
+  .method-row{
     display:flex;
-    flex-direction:column;
+    gap:64px;
+    align-items:center;
   }
-  /* Media block sized to the methodology image ratio (1912 x 942 ≈ 2.03:1).
-     Drop an <img> in here (see IMAGE SLOT comments below) and it will fill
-     this box edge-to-edge via object-fit:cover. */
+  .method-row.reverse{
+    flex-direction:row-reverse;
+  }
+  .method-text{
+    flex:0 0 300px;
+    max-width:300px;
+  }
+  .step-num{
+    font-family:var(--mono); font-size:13px; color:var(--blue-bright);
+  }
+  .method-text h3{
+    font-family:var(--head); font-weight:600; font-size:21px; margin:16px 0 12px;
+  }
+  .method-text p{color:var(--muted); font-size:14.5px; line-height:1.7;}
+
+  /* Single-image row — locked to the methodology image ratio
+     (1912 x 942 ≈ 2.03:1). Drop an <img> in here (see IMAGE SLOT comments
+     below) and it will fill this box edge-to-edge via object-fit:cover. */
   .step-media{
-    width:100%;
+    flex:1; min-width:0;
     aspect-ratio:1912/942;
     overflow:hidden;
-    border-bottom:1px solid var(--line);
     background:var(--panel);
     display:flex; align-items:center; justify-content:center;
   }
@@ -311,37 +328,37 @@
     object-fit:cover;
     display:block;
   }
-  .step-media svg{
-    /* placeholder icon sizing while no real photo is in place */
-    width:56px; height:56px;
+  /* Two-image row (e.g. a real-life reference photo next to its in-game
+     recreation) — used for the Visual References step. */
+  .step-media.two-up{
+    display:flex;
+    gap:16px;
+    aspect-ratio:auto;
   }
-  .step-body{
-    padding:28px 34px 40px;
+  .step-media.two-up img{
+    flex:1;
+    aspect-ratio:4/5;
+    object-fit:cover;
   }
-  .step-num{
-    font-family:var(--mono); font-size:13px; color:var(--blue-bright);
-  }
-  .step-body h3{
-    font-family:var(--head); font-weight:600; font-size:21px; margin:16px 0 12px;
-  }
-  .step-body p{color:var(--muted); font-size:14.5px; line-height:1.7;}
 
+  .tools-heading{
+    font-family:var(--head);
+    font-weight:600;
+    font-size:20px;
+    margin-bottom:28px;
+  }
   .tools{
-    margin-top:1px;
+    margin-top:0;
     display:grid; grid-template-columns:repeat(4, 1fr);
-    border:1px solid var(--line); border-top:none;
+    gap:32px;
   }
   .tool-link{
     display:flex; flex-direction:column; gap:10px;
-    padding:26px 22px;
-    border-left:1px solid var(--line);
-    transition:background .2s;
+    transition:opacity .2s;
   }
-  .tool-link:first-child{border-left:none;}
-  .tool-link:hover{background:var(--panel);}
+  .tool-link:hover{opacity:.75;}
   .tool-badge{
     width:36px; height:36px;
-    border:1px solid var(--blue-dim);
     display:grid; place-items:center;
     font-family:var(--mono); font-size:12px; color:var(--blue-bright);
   }
@@ -419,9 +436,10 @@
     nav{display:none;}
     .hero-inner{grid-template-columns:1fr;}
     .hero-visual{order:-1; max-width:340px; margin:0 auto;}
-    .steps{grid-template-columns:1fr;}
+    .method-row, .method-row.reverse{flex-direction:column; align-items:stretch; gap:28px;}
+    .method-text{flex:none; max-width:none;}
+    .method-rows{gap:64px;}
     .tools{grid-template-columns:repeat(2,1fr);}
-    .tool-link:nth-child(3){border-left:none;}
     .credits-grid{grid-template-columns:1fr; gap:40px;}
     .download-inner{padding:64px 0;}
     .footer-top{flex-direction:column;}
@@ -521,52 +539,51 @@
         <p class="section-note">It took us three years to realize that Google Earth provides altitude data.</p>
       </div>
 
-      <div class="steps">
-        <div class="step">
-          <!--
-            IMAGE SLOT: Step 1 image (Measurements) — target size 1912 x 942px
-            .step-media below is locked to that exact aspect ratio (1912/942 ≈ 2.03:1)
-            and will crop-to-fill (object-fit:cover) at any card width.
-            Replace the placeholder <svg> with:
-              <img src="images/step-1-measurements.jpg" alt="Google Earth measurements">
-          -->
-          <div class="step-media">
-            <img src="images/measurements.jpg" alt="Google Earth measurements">
-          </div>
-          <div class="step-body">
+      <div class="method-rows">
+        <div class="method-row">
+          <div class="method-text">
             <span class="step-num">01</span>
             <h3>Measurements</h3>
             <p>We used Google Earth to measure distances and altitudes in meters, then translated every reading into blocks at a 1:1 scale.</p>
           </div>
-        </div>
-        <div class="step">
           <!--
-            IMAGE SLOT: Step 2 image (Visual data) — target size 1912 x 942px
-            Replace the placeholder <svg> with:
-              <img src="images/step-2-visual-data.jpg" alt="Photographing a classroom for reference">
+            IMAGE SLOT: Step 1 image (Measurements) — target size 1912 x 942px
+            .step-media is locked to that exact aspect ratio (1912/942 ≈ 2.03:1)
+            and crop-to-fills (object-fit:cover) at any width.
           -->
           <div class="step-media">
-            <img src="images/visual-data.jpg" alt="Photographing the staff room">
+            <img src="images/measurements.jpg" alt="Google Earth measurements">
           </div>
-          <div class="step-body">
+        </div>
+
+        <div class="method-row reverse">
+          <div class="method-text">
             <span class="step-num">02</span>
             <h3>Visual References</h3>
             <p>We worked with Irvington students and staff to photograph and film rooms across campus, so every interior matches the real thing.</p>
           </div>
-        </div>
-        <div class="step">
           <!--
-            IMAGE SLOT: Step 3 image (Construction) — target size 1912 x 942px
-            Replace the placeholder <svg> with:
-              <img src="images/step-3-construction.jpg" alt="Scaffolding during construction in-game">
+            IMAGE SLOT: Step 2 images (Visual References) — two side-by-side
+            photos, e.g. a real reference photo next to its in-game recreation.
+            Each image in .two-up is cropped to a 4:5 portrait ratio.
           -->
-          <div class="step-media">
-            <img src="images/construction.jpg" alt="Building the softball field">
+          <div class="step-media two-up">
+            <img src="images/visual-data-reference.jpg" alt="Photographing the staff room">
+            <img src="images/visual-data-ingame.jpg" alt="The staff room recreated in-game">
           </div>
-          <div class="step-body">
+        </div>
+
+        <div class="method-row">
+          <div class="method-text">
             <span class="step-num">03</span>
             <h3>Construction</h3>
             <p>We used WorldEdit and CurveBuilding to construct the campus, then Litematica and MapArtCraft to place accurate map art throughout.</p>
+          </div>
+          <!--
+            IMAGE SLOT: Step 3 image (Construction) — target size 1912 x 942px
+          -->
+          <div class="step-media">
+            <img src="images/construction.jpg" alt="Building the softball field">
           </div>
         </div>
       </div>
@@ -580,6 +597,7 @@
         with a border — check contrast/padding once real logos (likely on transparent
         backgrounds) are dropped in.
       -->
+      <div class="tools-heading">Plugins and Websites Used</div>
       <div class="tools">
         <a class="tool-link" href="https://enginehub.org/worldedit" target="_blank" rel="noopener">
           <!-- IMAGE SLOT: WorldEdit logo -->
