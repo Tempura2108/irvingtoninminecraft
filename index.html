@@ -82,18 +82,16 @@
     max-width:1240px; margin:0 auto;
   }
   .brand{display:flex; align-items:center; gap:12px;}
+  /*
+    IMAGE SLOT: Brand mark
+    Previously a CSS-drawn rotated square with a glowing dot. Now a real
+    image (images/logo-blue.png) sized to the same 34x34 footprint used
+    everywhere the mark appears (header + footer).
+  */
   .brand-mark{
     width:34px; height:34px;
-    border:1.5px solid var(--blue);
-    display:grid; place-items:center;
-    position:relative;
-    transform:rotate(45deg);
-  }
-  .brand-mark span{
-    display:block; width:10px; height:10px;
-    background:var(--blue);
-    transform:rotate(-45deg);
-    box-shadow:0 0 12px var(--blue);
+    display:block;
+    object-fit:contain;
   }
   .brand-name{
     font-family:var(--head);
@@ -588,7 +586,7 @@
 <header>
   <div class="header-inner">
     <div class="brand">
-      <div class="brand-mark"><span></span></div>
+      <img class="brand-mark" src="images/logo-blue.png" alt="Irvington in Minecraft logo">
       <div class="brand-name">IRVINGTON <span class="light">IN MINECRAFT</span></div>
     </div>
     <nav>
@@ -882,7 +880,7 @@
     <div class="footer-top">
       <div class="footer-brand">
         <div class="brand">
-          <div class="brand-mark"><span></span></div>
+          <img class="brand-mark" src="images/logo-blue.png" alt="Irvington in Minecraft logo">
           <div class="brand-name">IRVINGTON <span class="light">IN MINECRAFT</span></div>
         </div>
         <p>A student project recreating Irvington High School block by block, in vanilla Minecraft.</p>
