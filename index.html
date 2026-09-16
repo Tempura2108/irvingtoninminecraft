@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Irvington In Minecraft</title> 
+<title>Irvington In Minecraft</title>
 
 <!--
   FAVICON
@@ -335,7 +335,7 @@
     min-width:0;
     max-width:1400px;
     aspect-ratio:2268/1814;
-    border:1px solid var(--line);
+    /* border:1px solid var(--line); */
     background:var(--panel);
     overflow:hidden;
   }
@@ -1076,21 +1076,36 @@
     if (e.key === 'Escape') closeLicenseModal();
   });
 
-  // Map hover reveal — tracks the cursor over the map and moves the
-  // soft-edged circular mask (defined in CSS as .map-frame.revealing
-  // .map-img-base) to follow it, using --mx/--my as percentages.
+  // Map hover reveal — activates within a radius around the map, not only
+  // when the cursor is directly over it. Listens on `document` instead of
+  // the map itself, computes the closest point on the map's bounding box
+  // to the cursor, and uses the distance to that point as the trigger.
   const mapFrame = document.getElementById('mapFrame');
+  const REVEAL_DISTANCE = 160; // px — how far outside the map the effect still triggers
+
   if (mapFrame) {
-    mapFrame.addEventListener('mousemove', (e) => {
+    document.addEventListener('mousemove', (e) => {
       const rect = mapFrame.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      mapFrame.style.setProperty('--mx', x + '%');
-      mapFrame.style.setProperty('--my', y + '%');
-      mapFrame.classList.add('revealing');
-    });
-    mapFrame.addEventListener('mouseleave', () => {
-      mapFrame.classList.remove('revealing');
+
+      // Clamp the cursor position to the box edges — this gives the
+      // nearest point ON the map to the actual cursor, even when the
+      // cursor is outside it entirely.
+      const nearestX = Math.max(rect.left, Math.min(e.clientX, rect.right));
+      const nearestY = Math.max(rect.top, Math.min(e.clientY, rect.bottom));
+
+      const dx = e.clientX - nearestX;
+      const dy = e.clientY - nearestY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance <= REVEAL_DISTANCE) {
+        const x = ((nearestX - rect.left) / rect.width) * 100;
+        const y = ((nearestY - rect.top) / rect.height) * 100;
+        mapFrame.style.setProperty('--mx', x + '%');
+        mapFrame.style.setProperty('--my', y + '%');
+        mapFrame.classList.add('revealing');
+      } else {
+        mapFrame.classList.remove('revealing');
+      }
     });
   }
 </script>
