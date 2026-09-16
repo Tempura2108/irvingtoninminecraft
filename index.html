@@ -338,6 +338,9 @@
     /* border:1px solid var(--line); */
     background:var(--panel);
     overflow:hidden;
+    /* Defaults before JS sets real values — fully closed (no hole). */
+    --reveal-radius:110px;
+    --reveal-alpha:1;
   }
   .map-frame img{
     position:absolute; inset:0;
@@ -360,10 +363,10 @@
      (hole open) up to 55% of the radius, then a smooth fade out to fully
      opaque by 100%, rather than a hard-edged circular cutout. */
   .map-frame.revealing .map-img-base{
-    -webkit-mask-image: radial-gradient(circle 110px at var(--mx) var(--my),
-      rgba(0,0,0,0) 0%, rgba(0,0,0,0) 55%, rgba(0,0,0,1) 100%);
-            mask-image: radial-gradient(circle 110px at var(--mx) var(--my),
-      rgba(0,0,0,0) 0%, rgba(0,0,0,0) 55%, rgba(0,0,0,1) 100%);
+    -webkit-mask-image: radial-gradient(circle var(--reveal-radius) at var(--mx) var(--my),
+      rgba(0,0,0,var(--reveal-alpha)) 0%, rgba(0,0,0,var(--reveal-alpha)) 55%, rgba(0,0,0,1) 100%);
+            mask-image: radial-gradient(circle var(--reveal-radius) at var(--mx) var(--my),
+      rgba(0,0,0,var(--reveal-alpha)) 0%, rgba(0,0,0,var(--reveal-alpha)) 55%, rgba(0,0,0,1) 100%);
   }
 
   /* ---------- METHODOLOGY ---------- */
@@ -1076,20 +1079,23 @@
     if (e.key === 'Escape') closeLicenseModal();
   });
 
-  // Map hover reveal — activates within a radius around the map, not only
-  // when the cursor is directly over it. Listens on `document` instead of
-  // the map itself, computes the closest point on the map's bounding box
-  // to the cursor, and uses the distance to that point as the trigger.
+  // Map hover reveal — the "hole" now fades and shrinks continuously the
+  // farther the cursor gets from the map, rather than snapping on/off at a
+  // fixed distance. Listens on `document`, finds the closest point on the
+  // map's bounding box to the cursor, and turns distance-from-that-point
+  // into a 0–1 "strength" value that drives both the hole's size and how
+  // transparent it gets.
   const mapFrame = document.getElementById('mapFrame');
-  const REVEAL_DISTANCE = 160; // px — how far outside the map the effect still triggers
+  const FADE_DISTANCE = 260; // px — distance at which the effect is fully gone
+  const MIN_RADIUS = 40;     // px — hole size once almost fully faded
+  const MAX_RADIUS = 110;    // px — hole size when right on (or very near) the map
 
   if (mapFrame) {
     document.addEventListener('mousemove', (e) => {
       const rect = mapFrame.getBoundingClientRect();
 
-      // Clamp the cursor position to the box edges — this gives the
-      // nearest point ON the map to the actual cursor, even when the
-      // cursor is outside it entirely.
+      // Nearest point ON the map to the cursor — used for position even
+      // when the cursor is outside the map entirely.
       const nearestX = Math.max(rect.left, Math.min(e.clientX, rect.right));
       const nearestY = Math.max(rect.top, Math.min(e.clientY, rect.bottom));
 
@@ -1097,15 +1103,20 @@
       const dy = e.clientY - nearestY;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
-      if (distance <= REVEAL_DISTANCE) {
-        const x = ((nearestX - rect.left) / rect.width) * 100;
-        const y = ((nearestY - rect.top) / rect.height) * 100;
-        mapFrame.style.setProperty('--mx', x + '%');
-        mapFrame.style.setProperty('--my', y + '%');
-        mapFrame.classList.add('revealing');
-      } else {
-        mapFrame.classList.remove('revealing');
-      }
+      // 1 = cursor on the map, fading linearly to 0 by FADE_DISTANCE away.
+      const strength = Math.max(0, 1 - distance / FADE_DISTANCE);
+
+      const radius = MIN_RADIUS + strength * (MAX_RADIUS - MIN_RADIUS);
+      const alpha = 1 - strength; // 0 = hole fully open, 1 = fully closed
+
+      const x = ((nearestX - rect.left) / rect.width) * 100;
+      const y = ((nearestY - rect.top) / rect.height) * 100;
+
+      mapFrame.style.setProperty('--mx', x + '%');
+      mapFrame.style.setProperty('--my', y + '%');
+      mapFrame.style.setProperty('--reveal-radius', radius + 'px');
+      mapFrame.style.setProperty('--reveal-alpha', alpha);
+      mapFrame.classList.toggle('revealing', strength > 0);
     });
   }
 </script>
