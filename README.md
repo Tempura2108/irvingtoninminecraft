@@ -1,3 +1,3 @@
 yes, this website is vibecoded using claude.
 
-actual minecraft stuff is all human made
+actual minecraft stuff is all human made tho
