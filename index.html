@@ -190,6 +190,12 @@
     border-color:var(--muted);
     box-shadow:none;
   }
+  /* Larger variant — used for the World Download section's main button so
+     it reads as the primary call to action on that page. */
+  .btn-large{
+    padding:22px 44px;
+    font-size:18px;
+  }
   .hero-visual{
     position:relative;
     aspect-ratio:1/1;
@@ -295,19 +301,69 @@
      (2268 x 1814 ≈ 1.25:1) so the layout never shifts once the real image
      is dropped in. object-fit:contain (not cover) since a map has labels
      and edges that shouldn't be cropped off. */
+
+  /* Row layout: rotated title on the left, map on the right. */
+  .map-layout{
+    display:flex;
+    align-items:stretch;
+    gap:32px;
+  }
+  /* Fixed-width column that holds the rotated title. Using absolute
+     positioning inside it (see .map-title) means this column's width is
+     NOT affected by the title text's actual (long, horizontal) length —
+     it just reserves a slim vertical lane next to the map. */
+  .map-title-wrap{
+    position:relative;
+    flex:0 0 48px;
+  }
+  .map-title{
+    position:absolute;
+    top:50%; left:50%;
+    /* rotate(-90deg): the classic "sideways gallery label" orientation —
+       reading bottom-to-top, with the bottom of each letter facing right,
+       i.e. facing the map next to it. */
+    transform:translate(-50%, -50%) rotate(-90deg);
+    white-space:nowrap;
+    font-family:var(--head);
+    font-weight:600;
+    font-size:clamp(20px, 2.2vw, 26px);
+    letter-spacing:-.01em;
+  }
   .map-frame{
     position:relative;
+    flex:1;
+    min-width:0;
     max-width:1400px;
-    margin:0 auto;
     aspect-ratio:2268/1814;
     /* border:1px solid var(--line); */
     background:var(--panel);
     overflow:hidden;
-    display:flex; align-items:center; justify-content:center;
   }
   .map-frame img{
+    position:absolute; inset:0;
     width:100%; height:100%;
     object-fit:contain;
+  }
+  /*
+    IMAGE SLOT: In-game recreation of the map — target size to match
+    old-ihs-map.jpg (2268 x 1814px). Sits underneath the real map photo;
+    hovering reveals a soft circular "window" through to it (see JS).
+  */
+  .map-img-reveal{
+    z-index:1;
+  }
+  .map-img-base{
+    z-index:2;
+  }
+  /* The reveal circle itself. --mx/--my are set by JS on mousemove.
+     The gradient stops create the soft, feathered edge: fully transparent
+     (hole open) up to 55% of the radius, then a smooth fade out to fully
+     opaque by 100%, rather than a hard-edged circular cutout. */
+  .map-frame.revealing .map-img-base{
+    -webkit-mask-image: radial-gradient(circle 110px at var(--mx) var(--my),
+      rgba(0,0,0,0) 0%, rgba(0,0,0,0) 55%, rgba(0,0,0,1) 100%);
+            mask-image: radial-gradient(circle 110px at var(--mx) var(--my),
+      rgba(0,0,0,0) 0%, rgba(0,0,0,0) 55%, rgba(0,0,0,1) 100%);
   }
 
   /* ---------- METHODOLOGY ---------- */
@@ -581,6 +637,16 @@
     .download-inner{padding:64px 0;}
     .footer-top{flex-direction:column;}
     .map-frame{max-width:100%;}
+    /* Rotated sidebar label doesn't fit well on narrow screens — fall back
+       to a normal horizontal title stacked above the map. */
+    .map-layout{flex-direction:column; align-items:stretch; gap:16px;}
+    .map-title-wrap{flex:none; width:auto; height:auto; position:static;}
+    .map-title{
+      position:static;
+      transform:none;
+      white-space:normal;
+      text-align:right;
+    }
   }
   @media (prefers-reduced-motion: reduce){
     .slide{transition:none;}
@@ -670,19 +736,24 @@
   <!-- Not linked from the header nav on purpose. -->
   <section id="map" class="section-pad">
     <div class="wrap">
-      <div class="section-head align-right">
-        <div>
-          <h2>2025 / 2026 Irvington Map</h2>
+      <div class="map-layout">
+        <div class="map-title-wrap">
+          <h2 class="map-title">2025 / 2026 Irvington Map</h2>
         </div>
-      </div>
-      <!--
-        IMAGE SLOT: School map — target size 2268 x 1814px
-        .map-frame is locked to that exact aspect ratio (2268/1814 ≈ 1.25:1)
-        and uses object-fit:contain (not cover) so map labels/edges never
-        get cropped off, unlike the screenshot/methodology images above.
-      -->
-      <div class="map-frame">
-        <img src="images/old-ihs-map.jpg" alt="2025-2026 Irvington High School campus map">
+        <!--
+          IMAGE SLOT: School map — target size 2268 x 1814px
+          .map-frame is locked to that exact aspect ratio (2268/1814 ≈ 1.25:1)
+          and uses object-fit:contain (not cover) so map labels/edges never
+          get cropped off, unlike the screenshot/methodology images above.
+
+          Hover reveal: hovering shows a soft circular window through to
+          images/mc-ihs-map.jpg underneath (the in-game recreation of this
+          same map), via a JS-driven mask centered on the cursor.
+        -->
+        <div class="map-frame" id="mapFrame">
+          <img class="map-img-reveal" src="images/mc-ihs-map.jpg" alt="In-game recreation of the Irvington campus map">
+          <img class="map-img-base" src="images/old-ihs-map.jpg" alt="2025-2026 Irvington High School campus map">
+        </div>
       </div>
     </div>
   </section>
@@ -853,7 +924,7 @@
             <div>VERSION<strong>Java 26.2</strong></div>
           </div>
         </div>
-        <a class="btn" href="files/irvington-in-minecraft-2026.zip" download>WORLD DOWNLOAD</a>
+        <a class="btn btn-large" href="files/irvington-in-minecraft-2026.zip" download>WORLD DOWNLOAD</a>
       </div>
       <div class="license-line">
         <button type="button" class="license-trigger" id="licenseTrigger">License: This world is licensed under CC BY 4.0. You may use, modify, and redistribute the world, provided that you give appropriate attribution.</button>
@@ -1004,6 +1075,24 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeLicenseModal();
   });
+
+  // Map hover reveal — tracks the cursor over the map and moves the
+  // soft-edged circular mask (defined in CSS as .map-frame.revealing
+  // .map-img-base) to follow it, using --mx/--my as percentages.
+  const mapFrame = document.getElementById('mapFrame');
+  if (mapFrame) {
+    mapFrame.addEventListener('mousemove', (e) => {
+      const rect = mapFrame.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      mapFrame.style.setProperty('--mx', x + '%');
+      mapFrame.style.setProperty('--my', y + '%');
+      mapFrame.classList.add('revealing');
+    });
+    mapFrame.addEventListener('mouseleave', () => {
+      mapFrame.classList.remove('revealing');
+    });
+  }
 </script>
 
 </body>
