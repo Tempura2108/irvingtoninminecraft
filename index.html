@@ -335,12 +335,14 @@
     min-width:0;
     max-width:1400px;
     aspect-ratio:2268/1814;
-    border:1px solid var(--line);
+    /* border:1px solid var(--line); */
     background:var(--panel);
     overflow:hidden;
     /* Defaults before JS sets real values — fully closed (no hole). */
     --reveal-radius:110px;
     --reveal-alpha:1;
+    --mx:50%;
+    --my:50%;
   }
   .map-frame img{
     position:absolute; inset:0;
@@ -1079,42 +1081,40 @@
     if (e.key === 'Escape') closeLicenseModal();
   });
 
-  // Map hover reveal — the "hole" now fades and shrinks continuously the
-  // farther the cursor gets from the map, rather than snapping on/off at a
-  // fixed distance. Listens on `document`, finds the closest point on the
-  // map's bounding box to the cursor, and turns distance-from-that-point
-  // into a 0–1 "strength" value that drives both the hole's size and how
-  // transparent it gets.
+  // Map hover reveal — the hole keeps a constant size and follows the
+  // cursor's exact position (even past the map's edges, using raw pixel
+  // offsets rather than clamped/percentage coordinates), while its opacity
+  // fades out the farther the cursor gets from the map. Listens on
+  // `document` so it still works when the cursor is outside the map.
   const mapFrame = document.getElementById('mapFrame');
-  const FADE_DISTANCE = 260; // px — distance at which the effect is fully gone
-  const MIN_RADIUS = 40;     // px — hole size once almost fully faded
-  const MAX_RADIUS = 110;    // px — hole size when right on (or very near) the map
+  const FADE_DISTANCE = 260;  // px — distance at which the effect is fully gone
+  const REVEAL_RADIUS = 110;  // px — constant hole size, regardless of distance
 
   if (mapFrame) {
     document.addEventListener('mousemove', (e) => {
       const rect = mapFrame.getBoundingClientRect();
 
-      // Nearest point ON the map to the cursor — used for position even
-      // when the cursor is outside the map entirely.
+      // Nearest point ON the map to the cursor — used only to measure how
+      // far outside the box the cursor is, for the fade calculation.
       const nearestX = Math.max(rect.left, Math.min(e.clientX, rect.right));
       const nearestY = Math.max(rect.top, Math.min(e.clientY, rect.bottom));
-
       const dx = e.clientX - nearestX;
       const dy = e.clientY - nearestY;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
       // 1 = cursor on the map, fading linearly to 0 by FADE_DISTANCE away.
       const strength = Math.max(0, 1 - distance / FADE_DISTANCE);
-
-      const radius = MIN_RADIUS + strength * (MAX_RADIUS - MIN_RADIUS);
       const alpha = 1 - strength; // 0 = hole fully open, 1 = fully closed
 
-      const x = ((nearestX - rect.left) / rect.width) * 100;
-      const y = ((nearestY - rect.top) / rect.height) * 100;
+      // Actual (unclamped) cursor position relative to the map, in px —
+      // this is what lets the circle keep moving past the map's edges
+      // instead of sticking to them.
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
 
-      mapFrame.style.setProperty('--mx', x + '%');
-      mapFrame.style.setProperty('--my', y + '%');
-      mapFrame.style.setProperty('--reveal-radius', radius + 'px');
+      mapFrame.style.setProperty('--mx', mx + 'px');
+      mapFrame.style.setProperty('--my', my + 'px');
+      mapFrame.style.setProperty('--reveal-radius', REVEAL_RADIUS + 'px');
       mapFrame.style.setProperty('--reveal-alpha', alpha);
       mapFrame.classList.toggle('revealing', strength > 0);
     });
