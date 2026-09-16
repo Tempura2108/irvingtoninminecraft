@@ -286,7 +286,35 @@
   }
   .arrow-btn:hover{border-color:var(--blue); color:var(--blue-bright);}
 
+  .section-head.align-right{
+    justify-content:flex-end;
+  }
+
+  /* ---------- SCHOOL MAP ---------- */
+  /* New section between Screenshots and Methodology — a single large JPG
+     of the campus map. Aspect ratio locked to the real file dimensions
+     (2268 x 1814 ≈ 1.25:1) so the layout never shifts once the real image
+     is dropped in. object-fit:contain (not cover) since a map has labels
+     and edges that shouldn't be cropped off. */
+  .map-frame{
+    position:relative;
+    max-width:900px;
+    margin:0 auto;
+    aspect-ratio:2268/1814;
+    border:1px solid var(--line);
+    background:var(--panel);
+    overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .map-frame img{
+    width:100%; height:100%;
+    object-fit:contain;
+  }
+
   /* ---------- METHODOLOGY ---------- */
+  #methodology{
+    background:var(--bg-alt);
+  }
   /* Alternating text/image rows — each step is a full-width row with a
      narrow text column and a large media column, flipping sides every
      other row (row 2 is reversed via .method-row.reverse). */
@@ -442,6 +470,75 @@
   .download-meta div{font-family:var(--mono); font-size:12.5px; color:var(--muted);}
   .download-meta strong{display:block; color:var(--white); font-family:var(--body); font-size:16px; margin-top:4px;}
 
+  /* License line at the bottom of the World Download section, and the
+     popup modal it opens. */
+  .license-line{
+    margin-top:32px;
+    font-size:12.5px;
+    color:var(--muted);
+    line-height:1.6;
+  }
+  .license-trigger{
+    background:none;
+    border:none;
+    padding:0;
+    font:inherit;
+    color:var(--muted);
+    text-decoration:underline;
+    text-underline-offset:2px;
+    cursor:pointer;
+    text-align:left;
+  }
+  .license-trigger:hover{color:var(--white);}
+
+  .modal-overlay{
+    display:none;
+    position:fixed; inset:0;
+    background:rgba(0,0,0,.75);
+    backdrop-filter:blur(4px);
+    z-index:100;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--line);
+    max-width:560px;
+    width:100%;
+    max-height:80vh;
+    overflow-y:auto;
+    padding:40px 36px;
+  }
+  .modal-box h3{
+    font-family:var(--head); font-weight:600; font-size:22px;
+    margin-bottom:20px;
+  }
+  .modal-box p{
+    color:var(--muted); font-size:14.5px; line-height:1.7;
+    margin-bottom:16px;
+  }
+  .modal-box ul{
+    color:var(--muted); font-size:14.5px; line-height:1.7;
+    margin:0 0 16px 20px;
+  }
+  .modal-box li{margin-bottom:6px;}
+  .modal-box a{color:var(--blue-bright); text-decoration:underline;}
+  .modal-close{
+    position:absolute; top:20px; right:20px;
+    width:32px; height:32px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--muted);
+    font-size:18px; line-height:1;
+    display:grid; place-items:center;
+    cursor:pointer;
+    transition:.2s;
+  }
+  .modal-close:hover{color:var(--white); border-color:var(--muted);}
+
   /* ---------- FOOTER ---------- */
   footer{padding:64px 0 40px;}
   .footer-top{
@@ -477,6 +574,7 @@
     .credits-grid{grid-template-columns:1fr; gap:40px;}
     .download-inner{padding:64px 0;}
     .footer-top{flex-direction:column;}
+    .map-frame{max-width:100%;}
   }
   @media (prefers-reduced-motion: reduce){
     .slide{transition:none;}
@@ -558,6 +656,27 @@
             <button class="arrow-btn" id="nextBtn" aria-label="Next screenshot">&#8594;</button>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHOOL MAP -->
+  <!-- Not linked from the header nav on purpose. -->
+  <section id="map" class="section-pad">
+    <div class="wrap">
+      <div class="section-head align-right">
+        <div>
+          <h2>2025 / 2026 Irvington Map</h2>
+        </div>
+      </div>
+      <!--
+        IMAGE SLOT: School map — target size 2268 x 1814px
+        .map-frame is locked to that exact aspect ratio (2268/1814 ≈ 1.25:1)
+        and uses object-fit:contain (not cover) so map labels/edges never
+        get cropped off, unlike the screenshot/methodology images above.
+      -->
+      <div class="map-frame">
+        <img src="images/old-ihs-map.jpg" alt="2025-2026 Irvington High School campus map">
       </div>
     </div>
   </section>
@@ -730,8 +849,30 @@
         </div>
         <a class="btn" href="files/irvington-in-minecraft-2026.zip" download>WORLD DOWNLOAD</a>
       </div>
+      <div class="license-line">
+        <button type="button" class="license-trigger" id="licenseTrigger">License: This world is licensed under CC BY 4.0. You may use, modify, and redistribute the world, provided that you give appropriate attribution.</button>
+      </div>
     </div>
   </section>
+
+  <!-- LICENSE MODAL -->
+  <div class="modal-overlay" id="licenseModal">
+    <div class="modal-box">
+      <button type="button" class="modal-close" id="licenseClose" aria-label="Close">&times;</button>
+      <h3>License</h3>
+      <p>This Minecraft world is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0).</p>
+      <p>You are free to download, use, modify, and redistribute this world, including creating and distributing modified or alternative versions.</p>
+      <p>When sharing or distributing this world or a modified version, you must:</p>
+      <ul>
+        <li>Give appropriate credit to [Your Name], the original creator.</li>
+        <li>Include a link to the original project or this website where reasonably possible.</li>
+        <li>Indicate if changes were made.</li>
+        <li>Not imply that the original creator endorses you or your use of the world.</li>
+      </ul>
+      <p>This license does not restrict you from making commercial use of the world.</p>
+      <p>View the full CC BY 4.0 license:<br><a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">https://creativecommons.org/licenses/by/4.0/</a></p>
+    </div>
+  </div>
 
 </main>
 
@@ -839,6 +980,24 @@
   document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
 
   resetTimer();
+
+  // License modal — opens on clicking the license line, closes via the
+  // × button, clicking the dark backdrop, or pressing Escape.
+  const licenseModal = document.getElementById('licenseModal');
+  const licenseTrigger = document.getElementById('licenseTrigger');
+  const licenseClose = document.getElementById('licenseClose');
+
+  function openLicenseModal(){ licenseModal.classList.add('open'); }
+  function closeLicenseModal(){ licenseModal.classList.remove('open'); }
+
+  licenseTrigger.addEventListener('click', openLicenseModal);
+  licenseClose.addEventListener('click', closeLicenseModal);
+  licenseModal.addEventListener('click', (e) => {
+    if (e.target === licenseModal) closeLicenseModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLicenseModal();
+  });
 </script>
 
 </body>
