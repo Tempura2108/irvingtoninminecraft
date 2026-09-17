@@ -326,7 +326,7 @@
     white-space:nowrap;
     font-family:var(--head);
     font-weight:600;
-    font-size:clamp(20px, 2.2vw, 50px);
+    font-size:clamp(20px, 2.2vw, 26px);
     letter-spacing:-.01em;
   }
   .map-frame{
@@ -335,11 +335,12 @@
     min-width:0;
     max-width:1400px;
     aspect-ratio:2268/1814;
-    border:1px solid var(--line);
+    /* border:1px solid var(--line); */
     background:var(--panel);
     overflow:hidden;
     /* Defaults before JS sets real values — fully closed (no hole). */
-    --reveal-radius:110px;
+    --reveal-size:150px;
+    --reveal-feather:14px;
     --reveal-alpha:1;
     --mx:50%;
     --my:50%;
@@ -364,11 +365,46 @@
      The gradient stops create the soft, feathered edge: fully transparent
      (hole open) up to 55% of the radius, then a smooth fade out to fully
      opaque by 100%, rather than a hard-edged circular cutout. */
+  /* Square reveal mask: two linear-gradients (one per axis) intersected
+     via mask-composite. Each gradient is opaque (alpha 1, hidden) outside
+     the square, dips to --reveal-alpha inside it, with a short --reveal-
+     feather transition zone between — that feather width is the "gradient
+     border": smaller = a sharper-edged square, larger = a softer one.
+     Intersecting the two axes is what turns two soft-edged bands into a
+     single soft-edged square instead of a plus/cross shape. */
   .map-frame.revealing .map-img-base{
-    -webkit-mask-image: radial-gradient(circle var(--reveal-radius) at var(--mx) var(--my),
-      rgba(0,0,0,var(--reveal-alpha)) 0%, rgba(0,0,0,var(--reveal-alpha)) 55%, rgba(0,0,0,1) 100%);
-            mask-image: radial-gradient(circle var(--reveal-radius) at var(--mx) var(--my),
-      rgba(0,0,0,var(--reveal-alpha)) 0%, rgba(0,0,0,var(--reveal-alpha)) 55%, rgba(0,0,0,1) 100%);
+    -webkit-mask-image:
+      linear-gradient(to right,
+        rgba(0,0,0,1) 0,
+        rgba(0,0,0,1) calc(var(--mx) - var(--reveal-size) - var(--reveal-feather)),
+        rgba(0,0,0,var(--reveal-alpha)) calc(var(--mx) - var(--reveal-size)),
+        rgba(0,0,0,var(--reveal-alpha)) calc(var(--mx) + var(--reveal-size)),
+        rgba(0,0,0,1) calc(var(--mx) + var(--reveal-size) + var(--reveal-feather)),
+        rgba(0,0,0,1) 100%),
+      linear-gradient(to bottom,
+        rgba(0,0,0,1) 0,
+        rgba(0,0,0,1) calc(var(--my) - var(--reveal-size) - var(--reveal-feather)),
+        rgba(0,0,0,var(--reveal-alpha)) calc(var(--my) - var(--reveal-size)),
+        rgba(0,0,0,var(--reveal-alpha)) calc(var(--my) + var(--reveal-size)),
+        rgba(0,0,0,1) calc(var(--my) + var(--reveal-size) + var(--reveal-feather)),
+        rgba(0,0,0,1) 100%);
+    -webkit-mask-composite: source-in;
+            mask-image:
+      linear-gradient(to right,
+        rgba(0,0,0,1) 0,
+        rgba(0,0,0,1) calc(var(--mx) - var(--reveal-size) - var(--reveal-feather)),
+        rgba(0,0,0,var(--reveal-alpha)) calc(var(--mx) - var(--reveal-size)),
+        rgba(0,0,0,var(--reveal-alpha)) calc(var(--mx) + var(--reveal-size)),
+        rgba(0,0,0,1) calc(var(--mx) + var(--reveal-size) + var(--reveal-feather)),
+        rgba(0,0,0,1) 100%),
+      linear-gradient(to bottom,
+        rgba(0,0,0,1) 0,
+        rgba(0,0,0,1) calc(var(--my) - var(--reveal-size) - var(--reveal-feather)),
+        rgba(0,0,0,var(--reveal-alpha)) calc(var(--my) - var(--reveal-size)),
+        rgba(0,0,0,var(--reveal-alpha)) calc(var(--my) + var(--reveal-size)),
+        rgba(0,0,0,1) calc(var(--my) + var(--reveal-size) + var(--reveal-feather)),
+        rgba(0,0,0,1) 100%);
+            mask-composite: intersect;
   }
 
   /* ---------- METHODOLOGY ---------- */
@@ -1087,8 +1123,9 @@
   // fades out the farther the cursor gets from the map. Listens on
   // `document` so it still works when the cursor is outside the map.
   const mapFrame = document.getElementById('mapFrame');
-  const FADE_DISTANCE = 260;  // px — distance at which the effect is fully gone
-  const REVEAL_RADIUS = 110;  // px — constant hole size, regardless of distance
+  const FADE_DISTANCE = 260;   // px — distance at which the effect is fully gone
+  const REVEAL_SIZE = 150;     // px — half the square's side length (larger = bigger square)
+  const REVEAL_FEATHER = 14;   // px — width of the soft edge transition (smaller = sharper edge)
 
   if (mapFrame) {
     document.addEventListener('mousemove', (e) => {
@@ -1114,7 +1151,8 @@
 
       mapFrame.style.setProperty('--mx', mx + 'px');
       mapFrame.style.setProperty('--my', my + 'px');
-      mapFrame.style.setProperty('--reveal-radius', REVEAL_RADIUS + 'px');
+      mapFrame.style.setProperty('--reveal-size', REVEAL_SIZE + 'px');
+      mapFrame.style.setProperty('--reveal-feather', REVEAL_FEATHER + 'px');
       mapFrame.style.setProperty('--reveal-alpha', alpha);
       mapFrame.classList.toggle('revealing', strength > 0);
     });
