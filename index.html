@@ -335,11 +335,11 @@
     min-width:0;
     max-width:1400px;
     aspect-ratio:2268/1814;
-    border:1px solid var(--line);
+    /* border:1px solid var(--line); */
     background:var(--panel);
     overflow:hidden;
     /* Defaults before JS sets real values — fully closed (no hole). */
-    --reveal-size:110px;
+    --reveal-size:150px;
     --reveal-feather:14px;
     --reveal-alpha:1;
     --mx:50%;
@@ -371,7 +371,15 @@
      feather transition zone between — that feather width is the "gradient
      border": smaller = a sharper-edged square, larger = a softer one.
      Intersecting the two axes is what turns two soft-edged bands into a
-     single soft-edged square instead of a plus/cross shape. */
+     single soft-edged square instead of a plus/cross shape.
+
+     Important: only -webkit-mask-composite is declared below, not the
+     unprefixed mask-composite. In current browsers -webkit-mask-image and
+     mask-image (and their composite counterparts) resolve to the same
+     underlying property, so declaring both with different composite
+     syntaxes causes the later one to silently win — and the unprefixed
+     "intersect" keyword isn't reliably supported, which is what was
+     producing a cross (default union) instead of a square. */
   .map-frame.revealing .map-img-base{
     -webkit-mask-image:
       linear-gradient(to right,
@@ -389,22 +397,6 @@
         rgba(0,0,0,1) calc(var(--my) + var(--reveal-size) + var(--reveal-feather)),
         rgba(0,0,0,1) 100%);
     -webkit-mask-composite: source-in;
-            mask-image:
-      linear-gradient(to right,
-        rgba(0,0,0,1) 0,
-        rgba(0,0,0,1) calc(var(--mx) - var(--reveal-size) - var(--reveal-feather)),
-        rgba(0,0,0,var(--reveal-alpha)) calc(var(--mx) - var(--reveal-size)),
-        rgba(0,0,0,var(--reveal-alpha)) calc(var(--mx) + var(--reveal-size)),
-        rgba(0,0,0,1) calc(var(--mx) + var(--reveal-size) + var(--reveal-feather)),
-        rgba(0,0,0,1) 100%),
-      linear-gradient(to bottom,
-        rgba(0,0,0,1) 0,
-        rgba(0,0,0,1) calc(var(--my) - var(--reveal-size) - var(--reveal-feather)),
-        rgba(0,0,0,var(--reveal-alpha)) calc(var(--my) - var(--reveal-size)),
-        rgba(0,0,0,var(--reveal-alpha)) calc(var(--my) + var(--reveal-size)),
-        rgba(0,0,0,1) calc(var(--my) + var(--reveal-size) + var(--reveal-feather)),
-        rgba(0,0,0,1) 100%);
-            mask-composite: intersect;
   }
 
   /* ---------- METHODOLOGY ---------- */
