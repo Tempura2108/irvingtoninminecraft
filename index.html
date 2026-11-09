@@ -462,6 +462,8 @@
   .credit-list li .role{
     font-family:var(--label); font-size:12px; color:var(--muted);
   }
+  /* Gold highlight for a name in the credits. */
+  .credit-list li .gold{color:#d4af37;}
 
   /* ---------- DOWNLOAD ---------- */
   .download-section{
@@ -651,10 +653,10 @@
 
 <header>
   <div class="header-inner">
-    <div class="brand">
+    <a class="brand" href="#top" aria-label="Irvington in Minecraft — back to top">
       <img class="brand-mark" src="images/logo-blue.png" alt="Irvington in Minecraft logo">
       <div class="brand-name">IRVINGTON <span class="light">IN MINECRAFT</span></div>
-    </div>
+    </a>
     <nav>
       <a href="#screenshots">Screenshots</a>
       <a href="#methodology">Methodology</a>
@@ -887,7 +889,7 @@
             <li>Dylan Kwok <span class="role">blueprints</span></li>
             <li>April Lee <span class="role">interiors</span></li>
             <li>Ishaan Mukerjee <span class="role">reference footage</span></li>
-            <li>Kyle Tsai <span class="role">server host / motivational support</span></li>
+            <li><span class="gold">Kyle Tsai</span> <span class="role">server host / motivational support</span></li>
             <li>Yashas Gupta <span class="role">reference footage</span></li>
             <li>Yoyo Tao <span class="role">reference footage</span></li>
             <li>Devin Truong <span class="role">reference footage</span></li>
