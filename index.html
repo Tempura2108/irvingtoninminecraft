@@ -21,10 +21,7 @@
          <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 -->
 <link rel="icon" type="image/png" sizes="32x32" href="images/logo-blue.png">
-  
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
   :root{
     --bg:#000000;
@@ -38,9 +35,13 @@
     --line-soft:#131b3a;
     --white:#eef1fb;
     --muted:#7c88ae;
-    --mono:'JetBrains Mono', monospace;
-    --head:'Space Grotesk', sans-serif;
-    --body:'Inter', sans-serif;
+    /* Helvetica everywhere. Helvetica Neue is preferred (macOS/iOS), then
+       plain Helvetica, then Arial as the fallback (Windows/Android don't
+       ship Helvetica). --label is for the small supporting text that used
+       to be set in a monospace font. */
+    --head:'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --body:'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --label:'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
@@ -104,7 +105,7 @@
   nav a{transition:color .2s;}
   nav a:hover{color:var(--white);}
   .header-tag{
-    font-family:var(--mono);
+    font-family:var(--label);
     font-size:12px;
     color:var(--blue-bright);
   }
@@ -126,19 +127,6 @@
     grid-template-columns:fit-content(560px) 1fr;; 
     align-items:center;
     width:100%;
-  }
-  .hero-eyebrow{
-    font-family:var(--mono);
-    font-size:13px;
-    color:var(--blue-bright);
-    margin-bottom:18px;
-    display:flex; align-items:center; gap:10px;
-  }
-  .hero-eyebrow::before{
-    content:''; 
-    width:22px; 
-    height:1px; 
-    background:var(--blue-bright);
   }
   .hero h1{
     font-family:var(--head);
@@ -211,13 +199,6 @@
     display:flex; justify-content:space-between; align-items:flex-end;
     gap:24px; margin-bottom:56px; flex-wrap:wrap;
   }
-  .section-index{
-    font-family:var(--mono);
-    font-size:12.5px;
-    color:var(--blue-bright);
-    margin-bottom:14px;
-    display:block;
-  }
   .section-head h2{
     font-family:var(--head);
     font-weight:600;
@@ -266,7 +247,7 @@
     padding:22px 26px;
     background:linear-gradient(to top, rgba(0,0,0,.9), transparent);
   }
-  .slide-caption .loc-index{font-family:var(--mono); color:var(--blue-bright); font-size:12px;}
+  .slide-caption .loc-index{font-family:var(--label); color:var(--blue-bright); font-size:12px;}
   .slide-caption h3{font-family:var(--head); font-weight:600; font-size:22px; margin-top:6px;}
   .slide-caption p{color:var(--muted); font-size:13.5px; margin-top:4px;}
   .carousel-controls{
@@ -396,7 +377,7 @@
     max-width:300px;
   }
   .step-num{
-    font-family:var(--mono); font-size:13px; color:var(--blue-bright);
+    font-family:var(--label); font-size:13px; color:var(--blue-bright);
   }
   .method-text h3{
     font-family:var(--head); font-weight:600; font-size:21px; margin:16px 0 12px;
@@ -442,15 +423,22 @@
     display:grid; grid-template-columns:repeat(4, 1fr);
     gap:32px;
   }
+  /* Logo and name sit side by side on the first row (logo left, name
+     right); the description spans the full width on the row below. */
   .tool-link{
-    display:flex; flex-direction:column; gap:10px;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    align-items:center;
+    column-gap:12px;
+    row-gap:10px;
     transition:opacity .2s;
   }
+  .tool-link .tool-desc{grid-column:1 / -1;}
   .tool-link:hover{opacity:.75;}
   .tool-badge{
     width:36px; height:36px;
     display:grid; place-items:center;
-    font-family:var(--mono); font-size:12px; color:var(--blue-bright);
+    font-family:var(--label); font-size:12px; color:var(--blue-bright);
   }
   .tool-link .tool-name{font-weight:600; font-size:14.5px; color:var(--white);}
   .tool-link .tool-desc{font-size:12.5px; color:var(--muted); line-height:1.5;}
@@ -472,7 +460,7 @@
     font-size:15px;
   }
   .credit-list li .role{
-    font-family:var(--mono); font-size:12px; color:var(--muted);
+    font-family:var(--label); font-size:12px; color:var(--muted);
   }
 
   /* ---------- DOWNLOAD ---------- */
@@ -533,7 +521,7 @@
     margin-top:26px; 
     flex-wrap:wrap;
   }
-  .download-meta div{font-family:var(--mono); font-size:12.5px; color:var(--muted);}
+  .download-meta div{font-family:var(--label); font-size:12.5px; color:var(--muted);}
   .download-meta strong{display:block; color:var(--white); font-family:var(--body); font-size:16px; margin-top:4px;}
 
   /* License line at the bottom of the World Download section, and the
@@ -615,7 +603,7 @@
   .footer-brand .brand{margin-bottom:14px;}
   .footer-brand p{color:var(--muted); font-size:14px; max-width:280px;}
   .footer-contact h4, .footer-links h4{
-    font-family:var(--mono); font-size:12px; color:var(--blue-bright);
+    font-family:var(--label); font-size:12px; color:var(--blue-bright);
     margin-bottom:16px;
   }
   .footer-contact p, .footer-links a{
@@ -627,7 +615,7 @@
     padding-top:28px; flex-wrap:wrap; gap:12px;
     font-size:13px; color:var(--muted);
   }
-  .footer-bottom span{font-family:var(--mono);}
+  .footer-bottom span{font-family:var(--label);}
 
   /* ---------- RESPONSIVE ---------- */
   @media (max-width:860px){
@@ -683,7 +671,6 @@
   <section class="hero">
     <div class="hero-inner">
       <div>
-        <div class="hero-eyebrow">IRVINGTON HIGH SCHOOL 2025 / 2026</div>
         <h1>Irvington<br>In Minecraft</h1>
         <!-- <p class="lede">A full-scale recreation of Irvington High School, measured to the meter and rebuilt one block at a time — every hallway, classroom and courtyard, on a fully vanilla server.</p> -->
         <div class="hero-actions">
@@ -710,7 +697,6 @@
     <div class="wrap">
       <div class="section-head">
         <div>
-          <!-- <span class="section-index">SCREENSHOTS</span> -->
           <h2>Made at a 1:1 Scale</h2>
         </div>
         <p class="section-note">Shaders: Complementary Reimagined</p>
@@ -768,7 +754,6 @@
     <div class="wrap">
       <div class="section-head">
         <div>
-          <!-- <span class="section-index">METHODOLOGY</span> -->
           <h2>How We Did It</h2>
         </div>
         <p class="section-note">It took us three years to realize that Google Earth provides altitude data.</p>
@@ -871,7 +856,6 @@
     <div class="wrap">
       <div class="section-head">
         <div>
-          <!-- <span class="section-index">CREDITS</span> -->
           <h2>Those Who Built It</h2>
         </div>
         <p class="section-note">Somehow, I acquired the blueprints for the school.</p>
@@ -921,7 +905,6 @@
     <div class="wrap">
       <div class="download-inner">
         <div>
-          <!-- <span class="section-index">WORLD DOWNLOAD</span> -->
           <h2>Take the Whole Campus Home</h2>
           <div class="download-meta">
             <div>FORMAT<strong>.zip world save</strong></div>
